@@ -53,24 +53,23 @@ function getSafePath(platform: 'android' | 'ios', version: string) {
 }
 
 const app = new Elysia()
-    .use(helmet({
-        contentSecurityPolicy: {
-            directives: {
-                "default-src": ["'self'"],
-                "script-src": ["'self'", "'unsafe-inline'"],
-                "script-src-attr": ["'unsafe-inline'"], // Allow inline event handlers
-                "style-src": ["'self'", "'unsafe-inline'"],
-                "connect-src": ["'self'"],
-                "img-src": ["'self'", "data:"],
-                "font-src": ["'self'", "https:", "data:"],
-                "object-src": ["'none'"],
-                "base-uri": ["'self'"],
-                "form-action": ["'self'"],
-                "frame-ancestors": ["'self'"],
-                "upgrade-insecure-requests": []
-            },
-        },
-    })) // Security Headers
+    // .use(helmet({
+    //     contentSecurityPolicy: {
+    //         directives: {
+    //             "default-src": ["'self'"],
+    //             "script-src": ["'self'", "'unsafe-inline'"],
+    //             "script-src-attr": ["'unsafe-inline'"], // Allow inline event handlers
+    //             "style-src": ["'self'", "'unsafe-inline'"],
+    //             "connect-src": ["'self'"],
+    //             "img-src": ["'self'", "data:"],
+    //             "font-src": ["'self'", "https:", "data:"],
+    //             "object-src": ["'none'"],
+    //             "base-uri": ["'self'"],
+    //             "form-action": ["'self'"],
+    //             "frame-ancestors": ["'self'"]
+    //         },
+    //     },
+    // })) // Security Headers
     .use(rateLimit({ duration: 60000, max: 100 })) // Limit: 100 reqs per minute
     .use(html())
     .use(
@@ -150,7 +149,7 @@ const app = new Elysia()
                 httpOnly: true,
                 maxAge: 3 * 60, // 3 minutes in seconds
                 path: '/',
-                secure: true, // Only send over HTTPS (if applicable)
+                secure: false, // Allow HTTP for testing
                 sameSite: 'strict', // CSRF Protection
             });
             return { success: true };
