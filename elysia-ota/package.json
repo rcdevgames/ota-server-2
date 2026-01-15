@@ -1,0 +1,18 @@
+{
+  "name": "elysia-ota",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts"
+  },
+  "dependencies": {
+    "@elysiajs/html": "latest",
+    "@elysiajs/jwt": "latest",
+    "elysia": "latest",
+    "elysia-helmet": "^3.0.0",
+    "elysia-rate-limit": "^4.4.2"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}

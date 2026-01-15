@@ -1,0 +1,63 @@
+name: Build OTA Servers
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-elysia:
+    name: Build ElysiaJS (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: |
+          cd elysia-ota
+          bun install
+
+      - name: Build Binary
+        run: |
+          cd elysia-ota
+          # Compile to a standalone binary for Linux x64
+          bun build src/index.ts --compile --target bun-linux-x64 --outfile elysia-ota
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: elysia-ota
+          path: elysia-ota/elysia-ota
+
+  build-go:
+    name: Build Golang (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Build Binary
+        run: |
+          cd go-ota
+          go mod tidy
+          # Build static binary for Linux x64
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o go-ota main.go
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: go-ota
+          path: go-ota/go-ota
