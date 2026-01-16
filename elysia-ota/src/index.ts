@@ -298,6 +298,33 @@ const app = new Elysia()
                 <body>
                     <div class="card">
                         <h1>OTA Manager</h1>
+
+                        <details style="margin-bottom: 1.5rem; border: 1px solid #ddd; padding: 1rem; border-radius: 4px; background: #f8f9fa;">
+                            <summary style="cursor: pointer; font-weight: 600; color: #007bff;">How to Bundle (React Native + Hermes)</summary>
+                            <div style="margin-top: 1rem; font-size: 0.9rem; line-height: 1.5;">
+                                <p style="margin-bottom:0.5rem"><strong>1. Generate Bundle</strong></p>
+                                <pre style="background: #2d2d2d; color: #ccc; padding: 0.75rem; border-radius: 4px; overflow-x: auto; margin-top:0">
+# Android
+npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output index.android.bundle
+
+# iOS
+npx react-native bundle --platform ios --dev false --entry-file index.js --bundle-output main.jsbundle</pre>
+
+                                <p style="margin-bottom:0.5rem; margin-top:1rem"><strong>2. Compile to Hermes Bytecode (Optional)</strong></p>
+                                <div style="font-size: 0.85em; color: #666; margin-bottom: 0.5rem;">Replace <code>%OS-BIN%</code> with <code>win64-bin</code>, <code>osx-bin</code>, or <code>linux64-bin</code>.</div>
+                                <pre style="background: #2d2d2d; color: #ccc; padding: 0.75rem; border-radius: 4px; overflow-x: auto; margin-top:0">
+# Android
+./node_modules/react-native/sdks/hermesc/%OS-BIN%/hermesc -O -emit-binary -out index.android.bundle.hbc index.android.bundle
+mv index.android.bundle.hbc index.android.bundle
+
+# iOS
+./node_modules/react-native/sdks/hermesc/%OS-BIN%/hermesc -O -emit-binary -out main.jsbundle.hbc main.jsbundle
+mv main.jsbundle.hbc main.jsbundle</pre>
+
+                                <p style="margin-bottom:0.5rem; margin-top:1rem"><strong>3. Zip & Upload</strong></p>
+                                <p style="margin-top:0">Compress the bundle file (<code>index.android.bundle</code> or <code>main.jsbundle</code>) and the <code>assets/</code> folder (if changed) into a <strong>.zip</strong> file. Upload below.</p>
+                            </div>
+                        </details>
                         
                         <div class="grid">
                             <div class="stat">
